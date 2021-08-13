@@ -24,11 +24,30 @@
                 </option>
             </select>
         </div>
+
         <div class="col mb-3" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
-            <button class="btn btn-primary" type="submit">Apply filters</button>
-            <button (click)="resetFilters()" class="btn btn-info" type="submit">Reset filters</button>
+            <button class="btn btn-primary btn-sm" type="submit">Apply filters</button>
+            <button (click)="resetFilters()" class="btn btn-info btn-sm" type="submit">Reset filters</button>
         </div>
 
+        <div class="col mb-3" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+            <div class="btn-group float-right">
+                <button 
+                    type="button"
+                    class="btn-primary" 
+                    name='orderby' 
+                    (click)="loadMembers()"
+                    btnRadio='lastActive'
+                    [(ngModel)]="userParams.orderBy">Last active</button>
+                <button 
+                    type="button"
+                    class="btn-primary" 
+                    name='orderby' 
+                    (click)="loadMembers()"
+                    btnRadio='created'
+                    [(ngModel)]="userParams.orderBy">Newest members</button>
+            </div>
+        </div>
     </form>
 </div>
 
