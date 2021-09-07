@@ -68,6 +68,12 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  showMessageTab() {
+    if(this.user.username === this.member.username)
+      return false;
+    return true;
+  }
+
   ngOnDestroy(): void {
     this.messageService.stopHubConnection();
   }
