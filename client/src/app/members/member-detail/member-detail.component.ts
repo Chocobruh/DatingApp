@@ -39,13 +39,15 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
       this.member = data.member;
     })
 
-    this.route.queryParams.subscribe(params => {
-      params.tab ? this.selectTab(params.tab) : this.selectTab(0);
-    })
-
     for (const photo of this.member.photos) {
       this.images.push(new ImageItem({ src: photo?.url, thumb: photo?.url }))
     }
+  }
+
+  ngAfterViewInit(): void {
+    this.route.queryParams.subscribe(params => {
+      params.tab ? this.selectTab(params.tab) : this.selectTab(0);
+    })
   }
   
 
