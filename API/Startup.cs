@@ -70,7 +70,7 @@ namespace API
             app.UseCors(policy => policy.AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials()
-                .WithOrigins("https://localhost:4200"));
+                .WithOrigins("https://localhost:4200", "https://microksm.herokuapp.com"));
 
             app.UseAuthentication();
             app.UseAuthorization();
