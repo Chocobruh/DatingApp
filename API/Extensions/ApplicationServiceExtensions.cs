@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using API.Helpers;
 using API.SignalR;
 using System;
+using Npgsql;
 
 namespace API.Extensions
 {
@@ -37,20 +38,22 @@ namespace API.Extensions
                 else
                 {
                     // Use connection string provided at runtime by Heroku.
-                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+                    var databaseUri = new Uri(databaseUrl);
+                    var userInfo = databaseUri.UserInfo.Split(':');
 
-                    // Parse connection URL to connection string for Npgsql
-                    connUrl = connUrl.Replace("postgres://", string.Empty);
-                    var pgUserPass = connUrl.Split("@")[0];
-                    var pgHostPortDb = connUrl.Split("@")[1];
-                    var pgHostPort = pgHostPortDb.Split("/")[0];
-                    var pgDb = pgHostPortDb.Split("/")[1];
-                    var pgUser = pgUserPass.Split(":")[0];
-                    var pgPass = pgUserPass.Split(":")[1];
-                    var pgHost = pgHostPort.Split(":")[0];
-                    var pgPort = pgHostPort.Split(":")[1];
+                    var builder = new NpgsqlConnectionStringBuilder
+                    {
+                        Host = databaseUri.Host,
+                        Port = databaseUri.Port,
+                        Username = userInfo[0],
+                        Password = userInfo[1],
+                        Database = databaseUri.LocalPath.TrimStart('/'),
+                        SslMode = SslMode.Require, 
+                        TrustServerCertificate = true
+                    };
 
-                    connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb}";
+                    connStr = builder.ToString();
                 }
 
                 // Whether the connection string came from the local development configuration file
